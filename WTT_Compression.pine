@@ -9,7 +9,7 @@ indicator("WaveRider WTT Compression", "WTT_Compression", overlay=true)
 // REVISION HISTORY:
 // R1.1 - Alert enhancements and default tuning
 //       - Added optional alert notifications for bullish/bearish breakouts
-//       - Raised default doji body threshold to 30% and enlarged breakout markers
+//       - Raised default doji body threshold to 30% and standardized tiny breakout markers
 //
 // R1.0 - Initial release - Doji breakout triangles
 //       - Detects classic doji candles with configurable body threshold
@@ -65,8 +65,8 @@ bearAlertMessage = "WaveRider WTT Compression: Bearish doji breakout on " + symi
 // VISUAL ELEMENTS
 // ============================================================================
 
-plotshape(showMarkers and isBullBreakout, title="Doji Breakout Up", style=shape.triangleup, location=location.belowbar, size=size.small, color=upColor)
-plotshape(showMarkers and isBearBreakout, title="Doji Breakout Down", style=shape.triangledown, location=location.abovebar, size=size.small, color=downColor)
+plotshape(showMarkers and isBullBreakout, title="Doji Breakout Up", style=shape.triangleup, location=location.belowbar, size=size.tiny, color=upColor)
+plotshape(showMarkers and isBearBreakout, title="Doji Breakout Down", style=shape.triangledown, location=location.abovebar, size=size.tiny, color=downColor)
 
 // ============================================================================
 // ALERTS
