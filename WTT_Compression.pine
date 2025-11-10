@@ -7,10 +7,13 @@ indicator("WaveRider WTT Compression", "WTT_Compression", overlay=true)
 // WaveRider Trading Technologies
 // 
 // REVISION HISTORY:
+// R1.1 - Alert enhancements and default tuning
+//       - Added optional alert notifications for bullish/bearish breakouts
+//       - Raised default doji body threshold to 30% and enlarged breakout markers
+//
 // R1.0 - Initial release - Doji breakout triangles
 //       - Detects classic doji candles with configurable body threshold
-//       - Marks bullish and bearish breakouts with tiny orange/purple triangles
-//       - Optional alerts for bullish and bearish breakout events
+//       - Marks bullish and bearish breakouts with orange/purple triangles
 //
 // The WTT Compression tool highlights potential breakout momentum that follows
 // indecision candles. When a doji appears, the script waits for the next bar to
