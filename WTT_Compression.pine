@@ -7,6 +7,9 @@ indicator("WaveRider WTT Compression", "WTT_Compression", overlay=true)
 // WaveRider Trading Technologies
 // 
 // REVISION HISTORY:
+// R1.2 - Default sensitivity adjustment
+//       - Lowered default doji body threshold to 15% for tighter compression detection
+//
 // R1.1 - Alert enhancements and default tuning
 //       - Added optional alert notifications for bullish/bearish breakouts
 //       - Raised default doji body threshold to 30% and standardized tiny breakout markers
@@ -26,8 +29,9 @@ indicator("WaveRider WTT Compression", "WTT_Compression", overlay=true)
 // ============================================================================
 
 // Detection Settings
-dojiBodyPercent = input.float(0.3, "Doji Body Threshold", minval=0.0, maxval=0.5, step=0.01, group="Detection Settings", tooltip="Maximum body-to-range ratio (0.30 = body <= 30% of total range) for a candle to qualify as a doji.")
+dojiBodyPercent = input.float(0.15, "Doji Body Threshold", minval=0.0, maxval=0.5, step=0.01, group="Detection Settings", tooltip="Maximum body-to-range ratio (0.15 = body <= 15% of total range) for a candle to qualify as a doji.")
 requireCloseBreak = input.bool(true, "Require Close Breakout", group="Detection Settings", tooltip="When enabled, the breakout candle must close beyond the doji high/low. Disable to react on intrabar breaches.")
+confirmOnBarClose = input.bool(true, "Confirm Breakouts On Close", group="Detection Settings", tooltip="Wait for the bar to close before confirming breakout signals. Disable to allow intrabar alerts/markers that may disappear if price reverses.")
 
 // Visual Settings
 showMarkers = input.bool(true, "Show Breakout Markers", group="Visual Settings", tooltip="Toggle display of the breakout triangles.")
@@ -57,6 +61,9 @@ closeBreaksDown = hasPriorHighLow and (requireCloseBreak ? close <= low[1] : low
 
 isBullBreakout = wasDoji and closeBreaksUp
 isBearBreakout = wasDoji and closeBreaksDown
+isBarConfirmed = not confirmOnBarClose or barstate.isconfirmed
+isBullSignal = isBullBreakout and isBarConfirmed
+isBearSignal = isBearBreakout and isBarConfirmed
 
 bullAlertMessage = "WaveRider WTT Compression: Bullish doji breakout on " + syminfo.ticker + " at " + str.tostring(close, format.mintick)
 bearAlertMessage = "WaveRider WTT Compression: Bearish doji breakout on " + syminfo.ticker + " at " + str.tostring(close, format.mintick)
@@ -65,17 +72,17 @@ bearAlertMessage = "WaveRider WTT Compression: Bearish doji breakout on " + symi
 // VISUAL ELEMENTS
 // ============================================================================
 
-plotshape(showMarkers and isBullBreakout, title="Doji Breakout Up", style=shape.triangleup, location=location.belowbar, size=size.tiny, color=upColor)
-plotshape(showMarkers and isBearBreakout, title="Doji Breakout Down", style=shape.triangledown, location=location.abovebar, size=size.tiny, color=downColor)
+plotshape(showMarkers and isBullSignal, title="Doji Breakout Up", style=shape.triangleup, location=location.belowbar, size=size.tiny, color=upColor)
+plotshape(showMarkers and isBearSignal, title="Doji Breakout Down", style=shape.triangledown, location=location.abovebar, size=size.tiny, color=downColor)
 
 // ============================================================================
 // ALERTS
 // ============================================================================
 
-if enableAlerts and isBullBreakout
+if enableAlerts and isBullSignal
     alert(bullAlertMessage, alert.freq_once_per_bar)
 
-if enableAlerts and isBearBreakout
+if enableAlerts and isBearSignal
     alert(bearAlertMessage, alert.freq_once_per_bar)
 
 // ============================================================================
