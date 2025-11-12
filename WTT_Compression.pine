@@ -8,7 +8,7 @@ indicator("WaveRider WTT Compression", "WTT_Compression", overlay=true)
 // 
 // REVISION HISTORY:
 // R1.2 - Default sensitivity adjustment
-//       - Lowered default doji body threshold to 15% for tighter compression detection
+//       - Lowered default doji body threshold to 13% for tighter compression detection
 //
 // R1.1 - Alert enhancements and default tuning
 //       - Added optional alert notifications for bullish/bearish breakouts
@@ -29,7 +29,7 @@ indicator("WaveRider WTT Compression", "WTT_Compression", overlay=true)
 // ============================================================================
 
 // Detection Settings
-dojiBodyPercent = input.float(0.15, "Doji Body Threshold", minval=0.0, maxval=0.5, step=0.01, group="Detection Settings", tooltip="Maximum body-to-range ratio (0.15 = body <= 15% of total range) for a candle to qualify as a doji.")
+dojiBodyPercent = input.float(0.13, "Doji Body Threshold", minval=0.0, maxval=0.5, step=0.01, group="Detection Settings", tooltip="Maximum body-to-range ratio (0.13 = body <= 13% of total range) for a candle to qualify as a doji.")
 requireCloseBreak = input.bool(true, "Require Close Breakout", group="Detection Settings", tooltip="When enabled, the breakout candle must close beyond the doji high/low. Disable to react on intrabar breaches.")
 confirmOnBarClose = input.bool(true, "Confirm Breakouts On Close", group="Detection Settings", tooltip="Wait for the bar to close before confirming breakout signals. Disable to allow intrabar alerts/markers that may disappear if price reverses.")
 
